@@ -1,12 +1,13 @@
 import { ChildProcessByStdio, spawn, SpawnOptions } from "child_process";
 import { deemphasized } from "./formatting";
+import { info } from "./output";
 
 export async function shellCommand(
   command: string,
   args: string[] = [],
   options?: SpawnOptions
 ): Promise<number> {
-  console.log(deemphasized(`$ ${command} ${args.join(" ")}`));
+  info(deemphasized(`$ ${command} ${args.join(" ")}`));
   const childProcess = spawn(command, args, {
     stdio: [process.stdin, process.stdout, process.stderr],
     ...options,

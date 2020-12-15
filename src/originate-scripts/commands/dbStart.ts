@@ -1,5 +1,6 @@
 import { databasePort, dbContainerName } from "../environment";
 import { emphasized } from "../formatting";
+import { info } from "../output";
 import { shellCommand } from "../shellCommand";
 
 export async function dbStart() {
@@ -10,9 +11,7 @@ export async function dbStart() {
     stdio: [process.stdin, "ignore", "ignore"],
   });
   if (startStatus === 0) {
-    console.error(
-      `Started existing database container, ${emphasized(containerName)}`
-    );
+    info(`Started existing database container, ${emphasized(containerName)}`);
     return;
   }
 
@@ -35,7 +34,7 @@ export async function dbStart() {
     }
   );
   if (runStatus === 0) {
-    console.error(
+    info(
       `Created a new database container, ${emphasized(
         containerName
       )}, published on port ${emphasized(dbPort)}`
