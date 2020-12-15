@@ -41,6 +41,7 @@
     "node": ">=12.9.0"
   },
   "dependencies": {
+    "@next/env": "^10.0.3",
     "chalk": "^4.1.0",
     "commander": "^6.2.1"
   }
