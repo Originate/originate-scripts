@@ -3,6 +3,7 @@
 import { Command } from "commander";
 import { dbDestroy } from "./originate-scripts/commands/dbDestroy";
 import { dbStart } from "./originate-scripts/commands/dbStart";
+import { dbStop } from "./originate-scripts/commands/dbStop";
 import { getVersion } from "./originate-scripts/version";
 
 export const program = new Command();
@@ -11,6 +12,12 @@ program
   .command("db:start")
   .description("start the dev database, or spin up a new one")
   .action(dbStart);
+program
+  .command("db:stop")
+  .description(
+    "stop the dev database; data is preserved in the stopped container"
+  )
+  .action(dbStop);
 program
   .command("db:destroy")
   .description("remove the dev database, permanently deleting ALL DATA")
