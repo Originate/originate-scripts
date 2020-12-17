@@ -1,12 +1,11 @@
-import Dockerode from "dockerode";
-import { docker } from "../docker";
+import { findContainer, docker } from "../docker";
 import { dbStart } from "./dbStart";
 
-process.env.DATABASE_URL = "postgres://localhost:1234/postgres";
-
-jest.setTimeout(30_000);
+process.env.DATABASE_URL = "postgres://localhost:30632/postgres";
 
 const containerName = "originate-postgres";
+
+jest.setTimeout(30_000);
 
 describe("db:start", () => {
   afterEach(async () => {
@@ -23,7 +22,7 @@ describe("db:start", () => {
     const state = await docker.getContainer(containerName).inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "0.0.0.0", HostPort: "1234" },
+      { HostIp: "0.0.0.0", HostPort: "30632" },
     ]);
   });
 
@@ -38,18 +37,7 @@ describe("db:start", () => {
     const state = await container.inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "0.0.0.0", HostPort: "1234" },
+      { HostIp: "0.0.0.0", HostPort: "30632" },
     ]);
   });
 });
-
-async function findContainer(
-  name: string
-): Promise<Dockerode.Container | undefined> {
-  const containerInfo = (await docker.listContainers()).find((info) =>
-    info.Names.includes(`/${name}`)
-  );
-  if (containerInfo) {
-    return docker.getContainer(containerInfo.Id);
-  }
-}
