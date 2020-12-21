@@ -22,11 +22,12 @@ describe("db:start", () => {
     const state = await docker.getContainer(containerName).inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "0.0.0.0", HostPort: "30632" },
+      { HostIp: "127.0.0.1", HostPort: "30632" },
     ]);
   });
 
   it("starts up an existing stopped container", async () => {
+    expect(await findContainer(containerName)).not.toBeDefined();
     await dbStart();
     const container = docker.getContainer(containerName);
     await container.stop();
@@ -37,7 +38,7 @@ describe("db:start", () => {
     const state = await container.inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "0.0.0.0", HostPort: "30632" },
+      { HostIp: "127.0.0.1", HostPort: "30632" },
     ]);
   });
 });
