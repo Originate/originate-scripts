@@ -22,7 +22,7 @@
   "scripts": {
     "prepublishOnly": "yarn build && yarn test",
     "build": "rimraf dist && yarn tsc",
-    "test": "jest",
+    "test": "jest --runInBand",
     "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "originate-scripts": "ts-node --project tsconfig-cjs.json src/originate-scripts.ts"
   },
