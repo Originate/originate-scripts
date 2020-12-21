@@ -9,12 +9,12 @@ export async function dbDestroy() {
   if (container) {
     await container.stop();
     await container.remove();
-    info(`Deleted database container, ${emphasized(containerName)}`);
+    info(`Removed database container, ${emphasized(containerName)}`);
   } else {
     info(
-      `Could not delete database container, ${emphasized(
+      `There is no database container named ${emphasized(
         containerName
-      )}, because it does not exist`
+      )} to remove`
     );
   }
 }

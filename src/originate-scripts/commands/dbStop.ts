@@ -11,9 +11,9 @@ export async function dbStop() {
     info(`Stopped database container, ${emphasized(containerName)}`);
   } else {
     info(
-      `Could not stop database container, ${emphasized(
+      `There is no database container named ${emphasized(
         containerName
-      )}, because it does not exist`
+      )} to stop`
     );
   }
 }
