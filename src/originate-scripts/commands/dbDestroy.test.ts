@@ -4,7 +4,7 @@ import { dbDestroy } from "./dbDestroy";
 
 process.env.DATABASE_URL = "postgres://localhost:30632/postgres";
 
-const containerName = "originate-postgres";
+const containerName = "originate-scripts-postgres";
 
 jest.setTimeout(30_000);
 

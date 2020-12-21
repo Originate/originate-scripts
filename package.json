@@ -1,5 +1,5 @@
 {
-  "name": "@originate/scripts",
+  "name": "originate-scripts",
   "version": "0.0.0-dev",
   "description": "Utilities to support create-originate-app",
   "license": "MIT",
