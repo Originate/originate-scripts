@@ -51,6 +51,8 @@ async function createContainer(opts: {
       AttachStdin: false,
       AttachStdout: false,
       AttachStderr: true,
+      OpenStdin: true,
+      StdinOnce: false,
       Env: ["POSTGRES_PASSWORD=password"],
       HostConfig: {
         PortBindings: {
