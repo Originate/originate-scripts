@@ -8,7 +8,7 @@
     "Jesse Hallett <jesse.hallett@originate.com>",
     "Danny Meyer <danny.meyer@originate.com>"
   ],
-  "repository": "https://github.com/github:Originate/originate-scripts",
+  "repository": "github:Originate/originate-scripts",
   "homepage": "https://github.com/Originate/originate-scripts#readme",
   "release": {
     "branches": [
