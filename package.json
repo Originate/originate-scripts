@@ -37,6 +37,7 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
     "ts-node": "^9.1.1",
+    "typeorm": "^0.2.29",
     "typescript": "^4.1.3"
   },
   "engines": {
@@ -44,6 +45,7 @@
   },
   "dependencies": {
     "@next/env": "^10.0.3",
+    "@originate/docker-await-postgres": "^1.1.0",
     "chalk": "^4.1.0",
     "commander": "^6.2.1",
     "dockerode": "^3.2.1"
