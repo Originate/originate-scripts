@@ -10,6 +10,11 @@
   ],
   "repository": "https://github.com/github:Originate/originate-scripts",
   "homepage": "https://github.com/Originate/originate-scripts#readme",
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "bin": {
