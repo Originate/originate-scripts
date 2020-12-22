@@ -1,4 +1,4 @@
-import { findContainer, docker } from "../docker";
+import { docker, findContainer, stopAndRemove } from "../docker";
 import { dbStart } from "./dbStart";
 
 // This is based on the package name in package.json
@@ -11,11 +11,7 @@ jest.setTimeout(30_000);
 
 describe("db:start", () => {
   afterEach(async () => {
-    const container = await findContainer(containerName);
-    if (container) {
-      await container.stop();
-      await container.remove();
-    }
+    await stopAndRemove(containerName);
   });
 
   it("starts a database in a new container", async () => {

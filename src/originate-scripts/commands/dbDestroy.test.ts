@@ -1,4 +1,4 @@
-import { findContainer, docker } from "../docker";
+import { docker, findContainer, stopAndRemove } from "../docker";
 import { dbStart } from "./dbStart";
 import { dbDestroy } from "./dbDestroy";
 
@@ -8,6 +8,10 @@ const containerName = "originate-scripts-postgres";
 jest.setTimeout(30_000);
 
 describe("db:destroy", () => {
+  afterEach(async () => {
+    await stopAndRemove(containerName);
+  });
+
   it("stops and removes a running database container", async () => {
     await dbStart();
     expect(

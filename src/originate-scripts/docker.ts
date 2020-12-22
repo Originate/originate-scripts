@@ -22,11 +22,20 @@ export async function findContainer(
   }
 }
 
+// This is used for test cleanup
+export async function stopAndRemove(containerName: string): Promise<void> {
+  const container = await findContainer(containerName);
+  try {
+    await container.stop();
+    await container.remove();
+  } catch (_err) {}
+}
+
 // Interactive shell code is adapted from answers to https://github.com/apocas/dockerode/issues/523
 export async function interactiveShell(
   container: Docker.Container,
   opts: Docker.ExecCreateOptions
-) {
+): Promise<void> {
   const exec = await container.exec({
     AttachStdin: true,
     AttachStdout: true,

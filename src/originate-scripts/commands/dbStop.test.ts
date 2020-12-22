@@ -1,4 +1,4 @@
-import { docker, findContainer } from "../docker";
+import { docker, stopAndRemove } from "../docker";
 import { dbStart } from "./dbStart";
 import { dbStop } from "./dbStop";
 
@@ -9,11 +9,7 @@ jest.setTimeout(30_000);
 
 describe("db:stop", () => {
   afterEach(async () => {
-    const container = await findContainer(containerName);
-    if (container) {
-      await container.stop();
-      await container.remove();
-    }
+    await stopAndRemove(containerName);
   });
 
   test("it stops a running database container", async () => {
