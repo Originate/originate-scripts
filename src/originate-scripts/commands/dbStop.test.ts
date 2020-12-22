@@ -2,8 +2,7 @@ import { docker, findContainer } from "../docker";
 import { dbStart } from "./dbStart";
 import { dbStop } from "./dbStop";
 
-process.env.DATABASE_URL = "postgres://localhost:30632/postgres";
-
+// This is based on the package name in package.json
 const containerName = "originate-scripts-postgres";
 
 jest.setTimeout(30_000);

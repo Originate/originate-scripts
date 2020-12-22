@@ -1,9 +1,11 @@
 import { findContainer, docker } from "../docker";
 import { dbStart } from "./dbStart";
 
-process.env.DATABASE_URL = "postgres://localhost:30632/postgres";
-
+// This is based on the package name in package.json
 const containerName = "originate-scripts-postgres";
+
+// Matches the port in DATABASE_URL in `.env.test`
+const dbPort = "30632";
 
 jest.setTimeout(30_000);
 
@@ -22,7 +24,7 @@ describe("db:start", () => {
     const state = await docker.getContainer(containerName).inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "127.0.0.1", HostPort: "30632" },
+      { HostIp: "127.0.0.1", HostPort: dbPort },
     ]);
   });
 
@@ -38,7 +40,7 @@ describe("db:start", () => {
     const state = await container.inspect();
     expect(state.State.Status).toBe("running");
     expect(state.NetworkSettings.Ports["5432/tcp"]).toMatchObject([
-      { HostIp: "127.0.0.1", HostPort: "30632" },
+      { HostIp: "127.0.0.1", HostPort: dbPort },
     ]);
   });
 });
