@@ -1,5 +1,5 @@
 import Dockerode from "dockerode";
-import { docker } from "../docker";
+import { docker, findContainer, isRunning } from "../docker";
 import { databasePort, dbContainerName } from "../environment";
 import { emphasized } from "../formatting";
 import { info } from "../output";
@@ -29,14 +29,18 @@ export async function dbStart() {
   );
 }
 
+// Resolves to true if there is an existing container and it was started, or it
+// was already running; false if there is no existing container.
 async function startExisting(containerName: string): Promise<boolean> {
-  try {
-    const existingContainer = docker.getContainer(containerName);
-    await existingContainer.start();
-    return true;
-  } catch (_err) {
+  const container = await findContainer(containerName);
+  if (!container) {
     return false;
   }
+
+  if (!(await isRunning(container))) {
+    await container.start();
+  }
+  return true;
 }
 
 async function createContainer(opts: {

@@ -11,24 +11,40 @@ if (!stats.isSocket()) {
 
 export const docker = new Docker({ socketPath });
 
+const runningStatuses = ["restarting", "running", "paused"];
+// const stoppedStatuses = ["created", "removing", "exited", "dead"];
+
 export async function findContainer(
   name: string
 ): Promise<Docker.Container | undefined> {
-  const containerInfo = (await docker.listContainers()).find((info) =>
-    info.Names.includes(`/${name}`)
-  );
+  const containerInfo = (
+    await docker.listContainers({ all: true })
+  ).find((info) => info.Names.includes(`/${name}`));
   if (containerInfo) {
     return docker.getContainer(containerInfo.Id);
   }
 }
 
-// This is used for test cleanup
-export async function stopAndRemove(containerName: string): Promise<void> {
-  const container = await findContainer(containerName);
-  try {
+export async function stopAndRemove(
+  containerName: string | Docker.Container
+): Promise<void> {
+  const container =
+    containerName instanceof Docker.Container
+      ? containerName
+      : await findContainer(containerName);
+
+  if (container && (await isRunning(container))) {
     await container.stop();
+  }
+
+  if (container) {
     await container.remove();
-  } catch (_err) {}
+  }
+}
+
+export async function isRunning(container: Docker.Container): Promise<boolean> {
+  const status = (await container.inspect()).State.Status;
+  return runningStatuses.includes(status);
 }
 
 // Interactive shell code is adapted from answers to https://github.com/apocas/dockerode/issues/523
