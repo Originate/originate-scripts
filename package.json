@@ -41,6 +41,7 @@
     "chalk": "^4.1.0",
     "commander": "^6.2.1",
     "dockerode": "^3.2.1",
+    "dockerode-utils": "^0.0.7",
     "supertest": ">=6.0.0"
   },
   "devDependencies": {

@@ -13,7 +13,7 @@ program.storeOptionsAsProperties(false).version(getVersion());
 program
   .command("db:start")
   .description("start the dev database, or spin up a new one")
-  .action(dbStart);
+  .action(() => dbStart());
 program
   .command("db:stop")
   .description(

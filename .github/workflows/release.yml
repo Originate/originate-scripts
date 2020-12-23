@@ -16,6 +16,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14
+      - name: pre-fetch postgres docker image
+        run: docker pull postgres:latest
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Release

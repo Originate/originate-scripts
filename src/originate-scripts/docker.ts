@@ -25,6 +25,13 @@ export async function findContainer(
   }
 }
 
+export async function imageExists(imageName: string): Promise<boolean> {
+  const images = await docker.listImages({
+    filters: { reference: [imageName] },
+  });
+  return images.length > 0;
+}
+
 export async function stopAndRemove(
   containerName: string | Docker.Container
 ): Promise<void> {

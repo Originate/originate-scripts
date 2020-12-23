@@ -1,12 +1,12 @@
 import Dockerode from "dockerode";
-import { docker, findContainer, isRunning } from "../docker";
+import { pullImageAsync } from "dockerode-utils";
+import { docker, findContainer, imageExists, isRunning } from "../docker";
 import { databasePort, dbContainerName } from "../environment";
 import { emphasized } from "../formatting";
 import { info } from "../output";
 
-export async function dbStart() {
+export async function dbStart(image: string = "postgres:latest") {
   const containerName = dbContainerName();
-  const imageTag = "latest";
 
   const started = await startExisting(containerName);
   if (started) {
@@ -14,10 +14,17 @@ export async function dbStart() {
     return;
   }
 
+  if (!(await imageExists(image))) {
+    info(`Downloading ${image}...`);
+    await pullImageAsync(docker, image, (_progress) => {
+      // TODO: show progress
+    });
+  }
+
   const dbPort = databasePort();
   const newContainer = await createContainer({
     containerName,
-    imageTag,
+    image,
     dbPort,
   });
   await startNew(newContainer);
@@ -45,13 +52,13 @@ async function startExisting(containerName: string): Promise<boolean> {
 
 async function createContainer(opts: {
   containerName: string;
-  imageTag: string;
+  image: string;
   dbPort: string;
 }): Promise<Dockerode.Container> {
   try {
     return await docker.createContainer({
       name: opts.containerName,
-      Image: `postgres:${opts.imageTag}`,
+      Image: opts.image,
       AttachStdin: false,
       AttachStdout: false,
       AttachStderr: true,
