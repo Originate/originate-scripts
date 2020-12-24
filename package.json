@@ -15,15 +15,11 @@
       "main"
     ]
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/src/index.js",
+  "module": "dist/esm/src/index.js",
   "bin": {
-    "originate-scripts": "dist/cjs/originate-scripts.js"
+    "originate-scripts": "dist/cjs/src/originate-scripts.js"
   },
-  "files": [
-    "dist",
-    "!*.tsbuildinfo"
-  ],
   "scripts": {
     "prepare": "install-peers",
     "prepublishOnly": "yarn build && yarn test",
