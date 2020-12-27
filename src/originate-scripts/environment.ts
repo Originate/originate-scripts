@@ -8,9 +8,15 @@ export function dbContainerName(): string {
 }
 
 function getProjectName(): string {
-  const packageJsonRaw = fs.readFileSync("package.json", "utf8");
-  const packageJson = JSON.parse(packageJsonRaw);
-  return packageJson.name.replace(/^@(.*)\/.*$/, "$1");
+  try {
+    const packageJsonRaw = fs.readFileSync("package.json", "utf8");
+    const packageJson = JSON.parse(packageJsonRaw);
+    return packageJson.name.replace(/^@(.*)\/.*$/, "$1");
+  } catch (_err) {
+    throw new Error(
+      "Could not read package name from package.json. Please make sure that you run originate-scripts in a directory with a package.json file that hase a `name` field."
+    );
+  }
 }
 
 export function databasePort(): string {
