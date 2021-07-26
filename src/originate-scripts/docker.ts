@@ -98,11 +98,13 @@ async function withRawTerminal<T>(fn: () => Promise<T>): Promise<T> {
   const isRaw = process.stdin.isRaw;
   process.stdin.resume();
   process.stdin.setEncoding("utf8");
-  process.stdin.setRawMode(true);
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
 
   const result = await fn();
 
-  if (isRaw) {
+  if (isRaw && process.stdin.isTTY) {
     process.stdin.setRawMode(isRaw);
     process.stdin.resume();
   }
