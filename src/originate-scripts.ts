@@ -12,8 +12,16 @@ export const program = new Command();
 program.storeOptionsAsProperties(false).version(getVersion());
 program
   .command("db:start")
+  .option(
+    "-i, --image <docker image>",
+    'docker image to run; e.g. "postgres:12"',
+    "postgres:latest"
+  )
   .description("start the dev database, or spin up a new one")
-  .action(() => dbStart());
+  .action((command: Command) => {
+    const opts = command.opts();
+    dbStart(opts.image);
+  });
 program
   .command("db:stop")
   .description(
