@@ -24,8 +24,9 @@ export function databasePort(): string {
     const url = new URL(env.DATABASE_URL);
     return url.port || "5432";
   } catch (err) {
+    const message = err instanceof Error ? err.message : "";
     throw new Error(
-      `there was an error reading database information from your DATABASE_URL environment variable: ${err.message}`
+      `there was an error reading database information from your DATABASE_URL environment variable: ${message}`
     );
   }
 }

@@ -73,9 +73,8 @@ async function createContainer(opts: {
       Tty: false,
     });
   } catch (err) {
-    throw new Error(
-      `failed to create a new database container: ${err.message}`
-    );
+    const message = err instanceof Error ? err.message : "";
+    throw new Error(`failed to create a new database container: ${message}`);
   }
 }
 
@@ -83,8 +82,9 @@ async function startNew(container: Dockerode.Container): Promise<void> {
   try {
     await container.start();
   } catch (err) {
+    const message = err instanceof Error ? err.message : "";
     throw new Error(
-      `created a new container, but there was an error starting it: ${err.message}`
+      `created a new container, but there was an error starting it: ${message}`
     );
   }
 }
