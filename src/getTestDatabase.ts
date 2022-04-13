@@ -2,7 +2,7 @@ import {
   Config,
   startPostgresContainer,
 } from "@originate/docker-await-postgres";
-import type { DataSourceOptions } from "typeorm";
+import type { ConnectionOptions } from "typeorm";
 
 export interface Options {
   /**
@@ -24,7 +24,7 @@ export interface Options {
    * If you use TypeScript for your TypeORM configuration then source your
    * `ormconfig.ts` file, and pass the exported object as `typeormConfig` here.
    */
-  typeormConfig?: DataSourceOptions;
+  typeormConfig?: ConnectionOptions;
 }
 
 /**
@@ -34,36 +34,37 @@ export interface Options {
  *
  * @param options.image Docker image to run; e.g. `"postgres:12"` (default: "postgres:latest")
  * @param options.runMigrations If true, connect and run migrations according to configuration in `ormconfig.js` (default: true)
- * @param options.typeormConfig Configuration options for TypeORM. If not provided then configuration for running migrations will be read from `ormconfig.js` instead.
+ * @param options.typeormConfig Configuration options for TypeORM. If not set config for migrations will be read from `ormconfig.js`.
  */
-export async function getTestDatabase(
-  options: Options = {}
-): Promise<{
+export async function getTestDatabase({
+  image = "postgres:latest",
+  runMigrations = true,
+  typeormConfig,
+}: Options = {}): Promise<{
   stop: () => Promise<void>;
 }> {
-  const { runMigrations = true } = options;
   const config: Config = {
     user: "postgres",
     password: "password",
     database: "postgres",
-    image: options.image,
+    image,
     ensureShutdown: true,
   };
   const { port, stop } = await startPostgresContainer(config);
   process.env.DATABASE_URL = `postgres://${config.user}:${config.password}@localhost:${port}/${config.database}`;
 
   if (runMigrations) {
-    await runTypeormMigrations(options);
+    await runTypeormMigrations(typeormConfig);
   }
 
   return { stop };
 }
 
-async function runTypeormMigrations({ typeormConfig }: Options) {
+async function runTypeormMigrations(typeormConfig?: ConnectionOptions) {
   const typeorm = await import("typeorm");
   const conn = typeormConfig
     ? await typeorm.createConnection(typeormConfig)
     : await typeorm.createConnection();
   await conn.runMigrations();
-  await conn.destroy();
+  await conn.close();
 }
