@@ -24,7 +24,7 @@ export interface Options {
    * If you use TypeScript for your TypeORM configuration then source your
    * `ormconfig.ts` file, and pass the exported object as `typeormConfig` here.
    */
-  typeormConfig?: ConnectionOptions;
+  typeormConfig?: () => Promise<ConnectionOptions>;
 }
 
 /**
@@ -34,7 +34,7 @@ export interface Options {
  *
  * @param options.image Docker image to run; e.g. `"postgres:12"` (default: "postgres:latest")
  * @param options.runMigrations If true, connect and run migrations according to configuration in `ormconfig.js` (default: true)
- * @param options.typeormConfig Configuration options for TypeORM. If not set config for migrations will be read from `ormconfig.js`.
+ * @param options.typeormConfig Async callback that returns configuration options for TypeORM. If you use an `ormconfig.ts` file you should import it in the callback using the `import` operator so that configuration is evaluated *after* `process.env.DATABASE_URL` is set. If not set config for migrations will be read from `ormconfig.js`.
  */
 export async function getTestDatabase({
   image = "postgres:latest",
@@ -54,7 +54,7 @@ export async function getTestDatabase({
   process.env.DATABASE_URL = `postgres://${config.user}:${config.password}@localhost:${port}/${config.database}`;
 
   if (runMigrations) {
-    await runTypeormMigrations(typeormConfig);
+    await runTypeormMigrations(await typeormConfig?.());
   }
 
   return { stop };
