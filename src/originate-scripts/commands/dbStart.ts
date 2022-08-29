@@ -5,7 +5,10 @@ import { databasePort, dbContainerName } from "../environment";
 import { emphasized } from "../formatting";
 import { info } from "../output";
 
-export async function dbStart(image: string = "postgres:latest") {
+export async function dbStart(
+  image: string = "postgres:latest",
+  envUrl: string = "DATABASE_URL"
+) {
   const containerName = dbContainerName();
 
   const started = await startExisting(containerName);
@@ -21,7 +24,7 @@ export async function dbStart(image: string = "postgres:latest") {
     });
   }
 
-  const dbPort = databasePort();
+  const dbPort = databasePort(envUrl);
   const newContainer = await createContainer({
     containerName,
     image,

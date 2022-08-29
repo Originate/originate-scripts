@@ -17,10 +17,15 @@ program
     'docker image to run; e.g. "postgres:12"',
     "postgres:latest"
   )
+  .option(
+    "-u, --url",
+    'Environment variable containing the database url; e.g. "MYAPP_DATABASE_URL"',
+    "DATABASE_URL"
+  )
   .description("start the dev database, or spin up a new one")
   .action((command: Command) => {
     const opts = command.opts();
-    dbStart(opts.image);
+    dbStart(opts.image, opts.url);
   });
 program
   .command("db:stop")

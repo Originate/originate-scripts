@@ -19,9 +19,9 @@ function getProjectName(): string {
   }
 }
 
-export function databasePort(): string {
+export function databasePort(envUrl = "DATABASE_URL"): string {
   try {
-    const url = new URL(env.DATABASE_URL);
+    const url = new URL(env[envUrl]);
     return url.port || "5432";
   } catch (err) {
     const message = err instanceof Error ? err.message : "";
